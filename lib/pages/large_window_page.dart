@@ -1,3 +1,5 @@
+import 'package:crono/widgets/new_project_button.dart';
+import 'package:crono/widgets/project_list_view.dart';
 import 'package:flutter/material.dart';
 
 class LargeWindowPage extends StatelessWidget {
@@ -10,8 +12,14 @@ class LargeWindowPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: false,
         title: const Text('CRONO'),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: NewProjectButton(),
+          ),
+        ],
       ),
-      body: const Center(child: SizedBox.shrink()),
+      body: const ProjectListView(),
     );
   }
 }

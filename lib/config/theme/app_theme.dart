@@ -8,7 +8,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
+        seedColor: Colors.deepOrange,
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: Colors.white,
@@ -29,10 +29,10 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
+        seedColor: Colors.deepOrange,
         brightness: Brightness.dark,
       ),
-      scaffoldBackgroundColor: const Color(0xFF121212),
+      scaffoldBackgroundColor: Colors.black,
       appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
       cardTheme: CardTheme(
         elevation: 2,

@@ -1,6 +1,7 @@
 import 'package:crono/config/theme/app_theme.dart';
 import 'package:crono/pages/large_window_page.dart';
 import 'package:crono/pages/small_window_page.dart';
+import 'package:crono/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -9,6 +10,9 @@ const String appTitle = 'Crono';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
+
+  // Inicializar el provider (singleton)
+  ProjectProvider();
 
   // Iniciar con ventana grande: 1200x800
   await windowManager.setSize(const Size(1200, 800));
