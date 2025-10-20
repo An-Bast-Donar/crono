@@ -6,28 +6,12 @@ import 'package:window_manager/window_manager.dart';
 
 const String appTitle = 'Crono';
 
-// Variable booleana para controlar qué ventana mostrar
-// true = ventana pequeña, false = ventana grande
-const bool isSmallWindow = false;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
 
-  // Configurar tamaño según el tipo de ventana
-  if (isSmallWindow) {
-    // Ventana pequeña: 250x250
-    await windowManager.setSize(const Size(250, 250));
-    await windowManager.setMinimumSize(const Size(250, 250));
-    await windowManager.setMaximumSize(const Size(250, 250));
-    await windowManager.setMaximizable(false); // Deshabilitar maximizar
-    await windowManager.setAlwaysOnTop(true); // Siempre al frente
-  } else {
-    // Ventana grande: 1200x800
-    await windowManager.setSize(const Size(1200, 800));
-    await windowManager.setMinimumSize(const Size(600, 600));
-  }
-
+  // Iniciar con ventana grande: 1200x800
+  await windowManager.setSize(const Size(1200, 800));
   await windowManager.center();
   await windowManager.show();
 
@@ -42,6 +26,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WindowListener {
+  // true = ventana pequeña, false = ventana grande
+  bool _isSmallWindow = false;
+
   @override
   void initState() {
     super.initState();
@@ -54,9 +41,56 @@ class _MyAppState extends State<MyApp> with WindowListener {
     super.dispose();
   }
 
+  // Interceptar minimizar cuando estamos en ventana grande
   @override
-  void onWindowMinimize() {
-    debugPrint('Se intentó minimizar la ventana');
+  void onWindowMinimize() async {
+    if (!_isSmallWindow) {
+      // Prevenir el comportamiento por defecto
+      await windowManager.restore();
+
+      // Cambiar a ventana pequeña
+      await _switchToSmallWindow();
+    }
+  }
+
+  // Interceptar maximizar cuando estamos en ventana pequeña
+  @override
+  void onWindowMaximize() async {
+    if (_isSmallWindow) {
+      // Prevenir el comportamiento por defecto
+      await windowManager.unmaximize();
+
+      // Cambiar a ventana grande
+      await _switchToLargeWindow();
+    }
+  }
+
+  Future<void> _switchToSmallWindow() async {
+    setState(() {
+      _isSmallWindow = true;
+    });
+
+    await windowManager.setAlwaysOnTop(true);
+    await windowManager.setSize(const Size(250, 250));
+
+    // Imprimir tamaño real de la ventana
+    final size = await windowManager.getSize();
+    debugPrint(
+      'Tamaño real de ventana pequeña: ${size.width} x ${size.height}',
+    );
+  }
+
+  Future<void> _switchToLargeWindow() async {
+    setState(() {
+      _isSmallWindow = false;
+    });
+
+    await windowManager.setAlwaysOnTop(false);
+    await windowManager.setSize(const Size(1200, 800));
+
+    // Imprimir tamaño real de la ventana
+    final size = await windowManager.getSize();
+    debugPrint('Tamaño real de ventana grande: ${size.width} x ${size.height}');
   }
 
   @override
@@ -67,7 +101,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: isSmallWindow ? const SmallWindowPage() : const LargeWindowPage(),
+      home: _isSmallWindow ? const SmallWindowPage() : const LargeWindowPage(),
     );
   }
 }
