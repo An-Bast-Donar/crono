@@ -1,6 +1,7 @@
+import 'package:crono/pages/project_detail_page.dart';
+import 'package:crono/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 
-import '../providers/project_provider.dart';
 import 'project_card.dart';
 
 class ProjectListView extends StatelessWidget {
@@ -37,8 +38,11 @@ class ProjectListView extends StatelessWidget {
             return ProjectCard(
               project: project,
               onTap: () {
-                // Aquí puedes agregar la navegación o acción al hacer clic
-                debugPrint('Tap en proyecto: ${project.name}');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProjectDetailPage(project: project),
+                  ),
+                );
               },
             );
           },

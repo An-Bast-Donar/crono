@@ -124,6 +124,9 @@ class _NewProjectModalState extends State<NewProjectModal> {
                                   _durationController.text,
                                 );
 
+                                // Convertir minutos a segundos explícitamente
+                                final estimatedSeconds = durationMinutes * 60;
+
                                 // Generar ID con formato: yyyyMMddHHmmssSSS
                                 final now = DateTime.now();
                                 final id =
@@ -135,12 +138,12 @@ class _NewProjectModalState extends State<NewProjectModal> {
                                     '${now.second.toString().padLeft(2, '0')}'
                                     '${now.millisecond.toString().padLeft(4, '0')}';
 
-                                // DEBUG: Generar minutos aleatorios para el progreso
-                                int randomElapsedMinutes = 0;
+                                // DEBUG: Generar segundos aleatorios para el progreso
+                                int randomElapsedSeconds = 0;
                                 if (kDebugMode) {
                                   final random = Random();
-                                  randomElapsedMinutes = random.nextInt(
-                                    durationMinutes + 1,
+                                  randomElapsedSeconds = random.nextInt(
+                                    estimatedSeconds + 1,
                                   );
                                 }
 
@@ -148,10 +151,10 @@ class _NewProjectModalState extends State<NewProjectModal> {
                                   id: id,
                                   name: projectName,
                                   estimatedTime: Duration(
-                                    minutes: durationMinutes,
+                                    seconds: estimatedSeconds,
                                   ),
                                   elapsedTime: Duration(
-                                    minutes: randomElapsedMinutes,
+                                    seconds: randomElapsedSeconds,
                                   ),
                                 );
 
